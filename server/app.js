@@ -21,7 +21,7 @@ const httpServer = http.createServer(app);
 // Middleware30.
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: process.env.PORT || "http://localhost:3000",
     credentials: true,
   })
 );
@@ -40,7 +40,6 @@ app.use("/api/v1", userRouter);
 app.use("/api/v1", taskRouter);
 
 // connect the frontend
-
 
 app.use(
   "/docs",
