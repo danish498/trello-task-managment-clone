@@ -36,10 +36,9 @@ const registerUser = asyncHandler(async (req, res, next) => {
   let token = await createToken(user);
 
   const options = {
-    httpOnly:false,
+    httpOnly: false,
     // secure: process.env.NODE_ENV === "production",
     maxAge: 30 * 24 * 60 * 60 * 1000,
-
   };
 
   return res.status(201).cookie("accessToken", token, options).json(
@@ -56,24 +55,20 @@ const registerUser = asyncHandler(async (req, res, next) => {
 const login = asyncHandler(async (req, res, next) => {
   const { email, password } = req.body;
 
-  console.log("check email over here", email, password);
+  const existedUser = await User.findOne({ email });
 
-  const exitedUser = await User.findOne({ email });
-
-  if (!exitedUser) {
-    throw new ApiError(409, "User does not existed", [
+  if (!existedUser) {
+    throw new ApiError(409, "User does not exist", [
       {
-        email: "User does not existed",
+        email: "User does not exist",
       },
     ]);
   }
 
   const isPasswordMatch = await bcryptUtil.compareHash(
     password,
-    exitedUser.password
+    existedUser.password
   );
-
-  console.log("chck the useraasfdsa", isPasswordMatch);
 
   if (!isPasswordMatch) {
     throw new ApiError(401, "Invalid credentials", [
@@ -83,24 +78,17 @@ const login = asyncHandler(async (req, res, next) => {
     ]);
   }
 
-  const user = await User.findById(exitedUser._id).select("-password");
+  const user = await User.findById(existedUser._id).select("-password");
   let token = await createToken(user);
 
-  const options = {
-    httpOnly: true,
-    secure: true,
-    sameSite: "Lax", // or "Strict"
-    maxAge: 30 * 24 * 60 * 60 * 1000,
-    
-  };
-
-  return res.status(201).cookie("accessToken", token, options).json(
+  return res.status(200).json(
     new ApiResponse(
       200,
       {
         user,
+        token, // Include the token in the response body
       },
-      "user has been logged"
+      "User has been logged in"
     )
   );
 });
@@ -117,4 +105,4 @@ const logoutUser = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, {}, "User logged out"));
 });
 
-module.exports = { registerUser, login , logoutUser};
+module.exports = { registerUser, login, logoutUser };

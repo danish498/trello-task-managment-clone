@@ -11,6 +11,7 @@ import axios, {
   AxiosError,
   AxiosResponse,
 } from "axios";
+import { getCookies } from "cookies-next";
 
 // Create an Axios instance for API requests
 
