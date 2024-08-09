@@ -12,7 +12,6 @@ import axios, {
   AxiosResponse,
 } from "axios";
 
-
 // Create an Axios instance for API requests
 
 const apiClient: AxiosInstance = axios.create({
@@ -21,6 +20,7 @@ const apiClient: AxiosInstance = axios.create({
     "Content-Type": "application/json",
   },
   timeout: 120000,
+  withCredentials: true,
 });
 
 apiClient.interceptors.request.use(

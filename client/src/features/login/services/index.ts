@@ -7,6 +7,7 @@ export const logInApi = async (data: FormData) => {
   try {
     const response = await apiClient.post(`/login`, data, {
       withCredentials: true,
+      
     });
 
     return response.data;
