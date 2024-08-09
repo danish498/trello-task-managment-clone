@@ -21,7 +21,7 @@ const httpServer = http.createServer(app);
 // Middleware30.
 app.use(
   cors({
-    origin: process.env.PORT || "http://localhost:3000",
+    origin: process.env.ClIENT_URL || "http://localhost:3000",
     credentials: true,
   })
 );
