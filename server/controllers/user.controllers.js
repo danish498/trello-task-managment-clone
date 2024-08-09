@@ -87,7 +87,7 @@ const login = asyncHandler(async (req, res, next) => {
   let token = await createToken(user);
 
   const options = {
-    httpOnly: false,
+    httpOnly: true,
     // secure: process.env.NODE_ENV === "production",
     maxAge: 30 * 24 * 60 * 60 * 1000,
   };
