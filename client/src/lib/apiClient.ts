@@ -16,7 +16,7 @@ import axios, {
 // Create an Axios instance for API requests
 
 const apiClient: AxiosInstance = axios.create({
-  baseURL: process.env.BASE_URL || "http://localhost:8080/api/v1",
+  baseURL: process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:8080/api/v1",
   headers: {
     "Content-Type": "application/json",
   },
