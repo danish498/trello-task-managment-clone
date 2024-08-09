@@ -31,6 +31,9 @@ app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 
 // app.use(express.json());
 
+const file = fs.readFileSync(path.resolve(__dirname, "./swagger.yaml"), "utf8");
+const swaggerDocument = YAML.parse(file);
+
 // route
 
 app.use("/api/v1", userRouter);
@@ -38,11 +41,7 @@ app.use("/api/v1", taskRouter);
 
 // connect the frontend
 
-app.use(express.static(path.join(__dirname, "/client/.next")));
 
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "/client/.next/server/app/index.html"));
-});
 
 app.use(
   "/docs",
