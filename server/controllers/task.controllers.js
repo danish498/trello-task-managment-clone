@@ -13,6 +13,14 @@ const statusMapping = {
 const getAllTask = asyncHandler(async (req, res, next) => {
   const user = req.user;
 
+  const statuses = {
+    "status-1": { id: "status-1", title: "To do", taskIds: [] },
+    "status-2": { id: "status-2", title: "In progress", taskIds: [] },
+    "status-3": { id: "status-3", title: "Under review", taskIds: [] },
+    "status-4": { id: "status-4", title: "Finished", taskIds: [] },
+  };
+  const statusOrder = ["status-1", "status-2", "status-3", "status-4"];
+
   const tasks = await Task.find({
     user: user._id,
   });
@@ -20,15 +28,14 @@ const getAllTask = asyncHandler(async (req, res, next) => {
   if (tasks.length === 0) {
     return res
       .status(200)
-      .json(new ApiResponse(200, { data: tasks }, "No data found"));
+      .json(
+        new ApiResponse(
+          200,
+          { tasks: {}, statuses, statusOrder },
+          "No data found"
+        )
+      );
   }
-
-  const statuses = {
-    "status-1": { id: "status-1", title: "To do", taskIds: [] },
-    "status-2": { id: "status-2", title: "In progress", taskIds: [] },
-    "status-3": { id: "status-3", title: "Under review", taskIds: [] },
-    "status-4": { id: "status-4", title: "Finished", taskIds: [] },
-  };
 
   const tasksById = {};
 
@@ -44,8 +51,6 @@ const getAllTask = asyncHandler(async (req, res, next) => {
     };
     statuses[statusMapping[task.status]].taskIds.unshift(task._id.toString());
   });
-
-  const statusOrder = ["status-1", "status-2", "status-3", "status-4"];
 
   return res
     .status(200)
@@ -75,7 +80,6 @@ const createTask = asyncHandler(async (req, res, next) => {
 
   const statusTitle = statusMapping[task.status];
 
-  console.log("check hte status title", statusTitle);
   return res
     .status(200)
     .json(

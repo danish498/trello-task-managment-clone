@@ -26,16 +26,10 @@ const apiClient: AxiosInstance = axios.create({
 
 apiClient.interceptors.request.use(
   async (config) => {
-    // const token = getCookies("accessToken");
-
-    // console.log(token);
-
     const token = document.cookie.replace(
       /(?:(?:^|.*;\s*)accessToken\s*=\s*([^;]*).*$)|^.*$/,
       "$1"
     );
-
-    console.log("cheasdfadsfads", token);
 
     // let token;
     if (token) {

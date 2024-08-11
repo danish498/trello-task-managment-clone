@@ -4,6 +4,7 @@ import "./globals.css";
 import Sidebar from "@/components/common/sidebar";
 import StoreProvider from "./StoreProvider";
 import { Toaster } from "@/components/ui/toaster";
+import { ThemeProvider } from "@/context/theme-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,11 +21,18 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <StoreProvider>
-          <Sidebar />
-          {children}
-          <Toaster />
-        </StoreProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <StoreProvider>
+            <Sidebar />
+            {children}
+            <Toaster />
+          </StoreProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -11,8 +11,6 @@ interface Task {
   deadline: Date;
   createdAt: Date;
   updatedAt: Date;
-
-  // Other task properties
 }
 
 interface Status {
@@ -35,7 +33,6 @@ export const getAllTask = createAsyncThunk(
   async (_, thunkApi) => {
     try {
       const response = await getAllTaskApi();
-
       return response.data;
     } catch (error) {
       return thunkApi.rejectWithValue(error);
@@ -62,7 +59,6 @@ export const createTask = createAsyncThunk(
   async (data: FormDataStatus, thunkApi) => {
     try {
       const response = await createTaskApi(data);
-
       return response.data;
     } catch (error) {
       return thunkApi.rejectWithValue(error);
@@ -146,7 +142,7 @@ export const TaskSlice = createSlice({
     builder.addCase(createTask.fulfilled, (state, action) => {
       const updatedTask = action.payload.task;
       const section = action.payload.section;
-
+      state.statuses[section].taskIds.push(updatedTask._id);
       state.tasks[updatedTask._id] = {
         id: updatedTask._id,
         content: updatedTask.description,
@@ -156,8 +152,6 @@ export const TaskSlice = createSlice({
         createdAt: updatedTask.createdAt,
         updatedAt: updatedTask.updatedAt,
       };
-
-      state.statuses[section].taskIds.unshift(updatedTask._id);
     });
     builder.addCase(createTask.rejected, (state, action) => {
       state.loading = false;

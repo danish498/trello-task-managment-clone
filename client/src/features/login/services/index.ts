@@ -3,6 +3,7 @@ import { userAuthSchema } from "@/lib/validations/auth";
 import { z } from "zod";
 type FormData = z.infer<typeof userAuthSchema>;
 import { setCookie } from "cookies-next";
+import { getFirstName } from "@/utils/helper";
 
 export const logInApi = async (data: FormData) => {
   try {
@@ -10,7 +11,9 @@ export const logInApi = async (data: FormData) => {
       withCredentials: true,
     });
 
-    console.log("check the response", response.data);
+    const { fullName } = response.data.data.user;
+
+    setCookie("name", fullName);
 
     setCookie("accessToken", response.data.data.token);
     return response.data;

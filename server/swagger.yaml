@@ -1,156 +1,249 @@
 openapi: 3.0.0
 info:
-  title: User API
-  description: API for managing users
+  title: Trello Task management
   version: 1.0.0
 servers:
   - url: http://localhost:8080/api/v1
-    description: Local server
-
+  - url: https://trello-task-managment-clone.onrender.com/api/v1
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
 tags:
-  - name: Users
-    description: Operations related to users
-
+  - name: User
+  - name: Task
 paths:
   /register:
-    get:
-      tags:
-        - Users
-      summary: Get all users
-      responses:
-        "200":
-          description: A list of users
-          headers:
-            Set-Cookie:
-              description: The session cookie
-              schema:
-                type: string
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/User"
     post:
       tags:
-        - Users
-      summary: Create a new user
+        - User
+      summary: Create User
       requestBody:
-        required: true
         content:
-          application/json:
+          application/x-www-form-urlencoded:
             schema:
-              $ref: "#/components/schemas/User"
+              properties:
+                email:
+                  type: string
+                  example: danish@dd.ddsd
+                password:
+                  type: integer
+                  example: '9525141754'
+                full_name:
+                  type: string
+                  example: danish
       responses:
-        "201":
-          description: User created successfully
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /login:
+    post:
+      tags:
+        - User
+      summary: LogIn
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              properties:
+                email:
+                  type: string
+                  example: danish@dd.ddsd
+                password:
+                  type: integer
+                  example: '9525141754'
+      responses:
+        '200':
+          description: OK
           headers:
-            Set-Cookie:
-              description: The session cookie
+            X-Powered-By:
               schema:
                 type: string
+                example: Express
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: https://trello-task-managment-clone.vercel.app
+            Vary:
+              schema:
+                type: string
+                example: Origin
+            Access-Control-Allow-Credentials:
+              schema:
+                type: boolean
+                example: 'true'
+            Content-Type:
+              schema:
+                type: string
+                example: application/json; charset=utf-8
+            Content-Length:
+              schema:
+                type: integer
+                example: '497'
+            ETag:
+              schema:
+                type: string
+                example: W/"1f1-gA03XsMnMND/ogBstx19tyttHoI"
+            Date:
+              schema:
+                type: string
+                example: Sun, 11 Aug 2024 19:53:39 GMT
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Keep-Alive:
+              schema:
+                type: string
+                example: timeout=5
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/User"
-
-  /users/{id}:
+                type: object
+              example:
+                statusCode: 200
+                data:
+                  user:
+                    _id: 66b3a9a43685d1a682ed528f
+                    fullName: danish
+                    email: danishnoor@dd.dd
+                    createdAt: '2024-08-07T17:06:44.435Z'
+                    updatedAt: '2024-08-07T17:06:44.435Z'
+                    __v: 0
+                  token: >-
+                    eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2YjNhOWE0MzY4NWQxYTY4MmVkNTI4ZiIsImZ1bGxOYW1lIjoiZGFuaXNoIiwiZW1haWwiOiJkYW5pc2hub29yQGRkLmRkIiwiaWF0IjoxNzIzNDA2MDE5LCJleHAiOjE3MjQwMTA4MTl9.T4NbJgLUxwjEeV3xp6Rv7sscOWaKhxobgAhSiYDnwNM
+                message: User has been logged in
+                success: true
+  /task:
     get:
       tags:
-        - Users
-      summary: Get a user by ID
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: string
-          description: The user ID
+        - Task
+      summary: Get All Tasks
+      security:
+        - bearerAuth: []
       responses:
-        "200":
-          description: A single user
+        '200':
+          description: OK
           headers:
-            Set-Cookie:
-              description: The session cookie
+            X-Powered-By:
               schema:
                 type: string
+                example: Express
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: https://trello-task-managment-clone.vercel.app
+            Vary:
+              schema:
+                type: string
+                example: Origin
+            Access-Control-Allow-Credentials:
+              schema:
+                type: boolean
+                example: 'true'
+            Content-Type:
+              schema:
+                type: string
+                example: application/json; charset=utf-8
+            Content-Length:
+              schema:
+                type: integer
+                example: '963'
+            ETag:
+              schema:
+                type: string
+                example: W/"3c3-3WgUzQJd6SjIm+wNTyDUSFMBrUk"
+            Date:
+              schema:
+                type: string
+                example: Sun, 11 Aug 2024 19:54:08 GMT
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Keep-Alive:
+              schema:
+                type: string
+                example: timeout=5
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/User"
-        "404":
-          description: User not found
-    put:
+                type: object
+              example:
+                statusCode: 200
+                data:
+                  tasks:
+                    66b739b381aa55b2590feeca:
+                      id: 66b739b381aa55b2590feeca
+                      content: destination user
+                      title: user title
+                      priority: medium
+                      deadline: '2024-08-19T18:30:00.000Z'
+                      createdAt: '2024-08-10T09:58:11.897Z'
+                      updatedAt: '2024-08-11T18:16:42.957Z'
+                    66b73aa11d9d6a24ede7ca88:
+                      id: 66b73aa11d9d6a24ede7ca88
+                      content: description
+                      title: add  into title
+                      priority: medium
+                      deadline: '2024-08-18T18:30:00.000Z'
+                      createdAt: '2024-08-10T10:02:09.770Z'
+                      updatedAt: '2024-08-10T10:56:06.795Z'
+                  statuses:
+                    status-1:
+                      id: status-1
+                      title: To do
+                      taskIds:
+                        - 66b73aa11d9d6a24ede7ca88
+                    status-2:
+                      id: status-2
+                      title: In progress
+                      taskIds: []
+                    status-3:
+                      id: status-3
+                      title: Under review
+                      taskIds:
+                        - 66b739b381aa55b2590feeca
+                    status-4:
+                      id: status-4
+                      title: Finished
+                      taskIds: []
+                  statusOrder:
+                    - status-1
+                    - status-2
+                    - status-3
+                    - status-4
+                message: ' task data fetched successfully'
+                success: true
+    post:
       tags:
-        - Users
-      summary: Update a user by ID
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: string
-          description: The user ID
+        - Task
+      summary: Create Task
       requestBody:
-        required: true
         content:
-          application/json:
+          application/x-www-form-urlencoded:
             schema:
-              $ref: "#/components/schemas/User"
+              properties:
+                priority:
+                  type: string
+                  example: urgent
+                description:
+                  type: string
+                  example: Under review2
+                deadline:
+                  type: string
+                  example: 12/30/2027
+                status:
+                  type: string
+                  example: Under review
+                title:
+                  type: string
+                  example: with finished
       responses:
-        "200":
-          description: User updated successfully
-          headers:
-            Set-Cookie:
-              description: The session cookie
-              schema:
-                type: string
+        '200':
+          description: Successful response
           content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/User"
-        "404":
-          description: User not found
-    delete:
-      tags:
-        - Users
-      summary: Delete a user by ID
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: string
-          description: The user ID
-      responses:
-        "204":
-          description: User deleted successfully
-          headers:
-            Set-Cookie:
-              description: The session cookie
-              schema:
-                type: string
-        "404":
-          description: User not found
+            application/json: {}
 
-components:
-  schemas:
-    User:
-      type: object
-      required:
-        - name
-        - email
-        - full_name
-      properties:
-        id:
-          type: string
-          description: The unique identifier for the user
-        name:
-          type: string
-          description: The name of the user
-        email:
-          type: string
-          description: The email of the user
-        full_name:
-          type: string
-          description: The full name of the user

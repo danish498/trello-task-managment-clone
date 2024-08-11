@@ -2,6 +2,7 @@ import apiClient from "@/lib/apiClient";
 import { TRegisterSchema } from "@/lib/validations/auth";
 import { z } from "zod";
 import { setCookie } from "cookies-next";
+import { getFirstName } from "@/utils/helper";
 
 export const registrationApi = async (data: TRegisterSchema) => {
   console.log("check reg", data);
@@ -11,7 +12,8 @@ export const registrationApi = async (data: TRegisterSchema) => {
       withCredentials: true,
     });
 
-    console.log("check the response", response.data);
+    const { fullName } = response.data.data.user;
+    setCookie("name", fullName);
 
     setCookie("accessToken", response.data.data.token);
     return response.data;

@@ -111,7 +111,6 @@ const AddTask: React.FC<AddTaskProps> = ({ isOpen, taskStatus, onClose }) => {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    console.log({ formData });
     dispatch(createTask(formData));
     onClose();
   };

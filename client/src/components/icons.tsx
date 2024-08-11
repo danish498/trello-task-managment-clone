@@ -24,6 +24,8 @@ import {
   User,
   EyeOff,
   X,
+  SunIcon,
+  MoonIcon,
   type Icon as LucideIcon,
 } from "lucide-react";
 

@@ -19,7 +19,8 @@ import {
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { logOutUser } from "@/service";
-import { deleteCookie } from "cookies-next";
+import { deleteCookie, getCookie } from "cookies-next";
+import { capitalizedFirstWord } from "@/utils/helper";
 
 const Sidebar = () => {
   const pathname = usePathname();
@@ -55,7 +56,6 @@ const Sidebar = () => {
     try {
       const response = await logOutUser();
 
-      console.log(response);
       if (response.success === true) {
         deleteCookie("accessToken");
         router.push("/login");
@@ -64,6 +64,9 @@ const Sidebar = () => {
       console.error("Error while logging out", error);
     }
   };
+
+  const name = getCookie("name");
+  const fullName = capitalizedFirstWord(name);
 
   return (
     <div className="w-64 pt-6 px-4 bg-[#FFFFFF] border-r border-[#DEDEDE] h-screen fixed top-0 left-0">
@@ -76,7 +79,7 @@ const Sidebar = () => {
               className="w-full h-full object-contain"
             />
           </div>
-          <h3 className="text-xl font-medium">Joe Gardner</h3>
+          <h1 className="text-xl font-medium">{`${fullName}`}</h1>
         </div>
         <div className="flex items-center gap-5">
           <span className="size-6">

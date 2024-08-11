@@ -21,7 +21,8 @@ import {
   updateTask,
 } from "@/features/home/service/taskSlice";
 import { RootState } from "@/lib/store";
-import { updateTaskApi } from "@/features/home/service";
+import { getFirstName, getGreetingMessage } from "@/utils/helper";
+import { getCookie } from "cookies-next";
 
 export default function Home() {
   const [taskStatus, setTaskStatus] = useState("");
@@ -69,12 +70,17 @@ export default function Home() {
     },
   ];
 
+  const greetingMessage = getGreetingMessage();
+  const name = getCookie("name") || "";
+
+  const firstName = getFirstName(name);
+
   const renderTasks = (taskIds: string[]) =>
     taskIds.map((taskId, index) => {
       const task = tasks[taskId];
 
       return (
-        <Draggable key={task.id} draggableId={task.id} index={index}>
+        <Draggable key={task?.id} draggableId={task?.id} index={index}>
           {(provided) => (
             <div
               ref={provided.innerRef}
@@ -146,7 +152,7 @@ export default function Home() {
       <div className="ml-64 bg-[#F7F7F7]  py-2 pl-4 pr-8 h-screen">
         <div className="flex items-center mb-4">
           <h1 className="text-5xl font-semibold text-blacks">
-            Good morning, Joe!
+            {`${greetingMessage}  ${firstName}`}
           </h1>
           <span className="flex items-center gap-2 ml-auto">
             Help & feedback
@@ -382,9 +388,9 @@ export default function Home() {
         {/* TODO */}
 
         {/* <div className="p-4 flex flex-row"> */}
-        <DragDropContext onDragEnd={onDragEnd} >
+        <DragDropContext onDragEnd={onDragEnd}>
           <div className="flex flex-wrap">
-            {statusOrder.map((order) => {
+            {statusOrder?.map((order) => {
               const status = statuses[order];
 
               return (

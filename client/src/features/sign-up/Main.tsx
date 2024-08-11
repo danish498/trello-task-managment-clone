@@ -34,6 +34,8 @@ export function SignUp({ className, ...props }: UserAuthFormProps) {
     resolver: zodResolver(registerSchema),
   });
   const [showPassword, setShowPassword] = React.useState<boolean>(false);
+  const [showConfirmPassword, setShowConfirmPassword] =
+    React.useState<boolean>(false);
 
   const router = useRouter();
 
@@ -41,12 +43,16 @@ export function SignUp({ className, ...props }: UserAuthFormProps) {
     setShowPassword(!showPassword);
   };
 
+  const toggleConfirmPasswordVisibility = () => {
+    setShowConfirmPassword(!showConfirmPassword);
+  };
+
   async function onSubmit(data: TRegisterSchema) {
     console.log("data", data);
 
     try {
       const response = await registrationApi(data);
-      if (response.success == true) {
+      if (response.success === true) {
         router.push("/");
 
         toast({
@@ -156,7 +162,7 @@ export function SignUp({ className, ...props }: UserAuthFormProps) {
               <Input
                 id="confirm_password"
                 placeholder="confirm password"
-                type={showPassword ? "text" : "password"}
+                type={showConfirmPassword ? "text" : "password"}
                 autoCapitalize="none"
                 autoComplete="new-password"
                 autoCorrect="off"
@@ -165,9 +171,9 @@ export function SignUp({ className, ...props }: UserAuthFormProps) {
               />
               <div
                 className="absolute bottom-0 top-2 right-3 cursor-pointer"
-                onClick={togglePasswordVisibility}
+                onClick={toggleConfirmPasswordVisibility}
               >
-                {showPassword ? <Icons.eyeOff /> : <Icons.eyeIcons />}
+                {showConfirmPassword ? <Icons.eyeOff /> : <Icons.eyeIcons />}
               </div>
             </div>
 
