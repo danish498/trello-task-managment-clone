@@ -8,7 +8,7 @@ import { Login } from "@/features/login/Main";
 
 
 export const metadata: Metadata = {
-  title: "Login..",
+  title: "Login",
   description: "Login to your account",
 };
 

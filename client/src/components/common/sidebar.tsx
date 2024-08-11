@@ -19,6 +19,7 @@ import {
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { logOutUser } from "@/service";
+import { deleteCookie } from "cookies-next";
 
 const Sidebar = () => {
   const pathname = usePathname();
@@ -36,10 +37,10 @@ const Sidebar = () => {
 
   const menuItems = [
     { href: "/", icon: <HomeIcon />, label: "Home" },
-    { href: "/boarddfsfs", icon: <BoardsIcon />, label: "Boards" },
-    { href: "/settisdsdfngs", icon: <SettingsIcon />, label: "Settings" },
-    { href: "/tsdfdsfdsams", icon: <TeamsIcon />, label: "Teams" },
-    { href: "/anasdfdslytics", icon: <AnalyticsIcon />, label: "Analytics" },
+    { href: "/assign-task", icon: <BoardsIcon />, label: "Assign" },
+    { href: "/setting", icon: <SettingsIcon />, label: "Settings" },
+    { href: "/team", icon: <TeamsIcon />, label: "Teams" },
+    { href: "/analytics", icon: <AnalyticsIcon />, label: "Analytics" },
   ];
 
   const linkClasses = (isActive: boolean) =>
@@ -51,14 +52,12 @@ const Sidebar = () => {
     );
 
   const handleLOgOutClick = async () => {
-
-    console.log('check')
     try {
       const response = await logOutUser();
 
-      console.log(response)
+      console.log(response);
       if (response.success === true) {
-
+        deleteCookie("accessToken");
         router.push("/login");
       }
     } catch (error) {

@@ -34,12 +34,16 @@ const taskSchema = Schema(
       // required: true,
       trim: true,
     },
+    user: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
   },
   {
     timestamps: true,
   }
 );
-
 
 const Task = mongoose.model("Task", taskSchema);
 module.exports = Task;

@@ -12,7 +12,7 @@ import { userAuthSchema } from "@/lib/validations/auth";
 import { buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { toast } from "@/components/ui/use-toast";
+import { toast, useToast } from "@/components/ui/use-toast";
 import { Icons } from "@/components/icons";
 import { logInApi } from "./services";
 import { useRouter } from "next/navigation";
@@ -20,7 +20,7 @@ import { useRouter } from "next/navigation";
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 type FormData = z.infer<typeof userAuthSchema>;
-interface ApiError {
+export interface ApiError {
   errors: Record<string, string>[];
   message: string;
 }
@@ -38,6 +38,8 @@ export function Login({ className, ...props }: UserAuthFormProps) {
 
   const [showPassword, setShowPassword] = React.useState<boolean>(false);
 
+  const { toast } = useToast();
+
   const router = useRouter();
 
   const togglePasswordVisibility = () => {
@@ -49,6 +51,14 @@ export function Login({ className, ...props }: UserAuthFormProps) {
       const response = await logInApi(data);
       if (response.success == true) {
         router.push("/");
+        toast({
+          className: cn(
+            "top-0 right-0 flex fixed md:max-w-[420px] md:top-4 md:right-4"
+          ),
+          variant: "default",
+          title: "Welcome back",
+          description: "Successfully logged in!",
+        });
       }
     } catch (error) {
       const apiError = error as ApiError;

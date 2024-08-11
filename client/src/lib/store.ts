@@ -1,11 +1,9 @@
-import counterReducer from "@/features/counter/service/counterSlice";
 import taskReducer from "@/features/home/service/taskSlice";
 import { configureStore } from "@reduxjs/toolkit";
 
 export const makeStore = () => {
   return configureStore({
     reducer: {
-      counter: counterReducer,
       task: taskReducer,
     },
   });

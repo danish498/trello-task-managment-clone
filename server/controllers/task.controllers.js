@@ -11,7 +11,11 @@ const statusMapping = {
 };
 
 const getAllTask = asyncHandler(async (req, res, next) => {
-  const tasks = await Task.find();
+  const user = req.user;
+
+  const tasks = await Task.find({
+    user: user._id,
+  });
 
   if (tasks.length === 0) {
     return res
@@ -56,6 +60,7 @@ const getAllTask = asyncHandler(async (req, res, next) => {
 
 const createTask = asyncHandler(async (req, res, next) => {
   const { status, priority, deadline, description, title } = req.body;
+  const user = req.user;
 
   const task = new Task({
     status,
@@ -63,6 +68,7 @@ const createTask = asyncHandler(async (req, res, next) => {
     deadline,
     description,
     title,
+    user: user._id,
   });
 
   await task.save();

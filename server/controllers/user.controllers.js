@@ -12,14 +12,12 @@ const { createToken } = require("../utils/jwt.utils");
 const registerUser = asyncHandler(async (req, res, next) => {
   const { email, password, full_name } = req.body;
 
-  console.log("check email over here", email);
+  const existedUser = await User.findOne({ email });
 
-  const exitedUser = await User.findOne({ email });
-
-  if (exitedUser) {
+  if (existedUser) {
     throw new ApiError(409, "User with email or username already exists", [
       {
-        message: "User with email or username already exists",
+        email: "User with email or username already exists",
       },
     ]);
   }
@@ -35,19 +33,15 @@ const registerUser = asyncHandler(async (req, res, next) => {
   const user = await User.findById(newUser._id).select("-password");
   let token = await createToken(user);
 
-  const options = {
-    httpOnly: false,
-    // secure: process.env.NODE_ENV === "production",
-    maxAge: 30 * 24 * 60 * 60 * 1000,
-  };
-
-  return res.status(201).cookie("accessToken", token, options).json(
+  // Send token in response body
+  return res.status(201).json(
     new ApiResponse(
-      200,
+      201,
       {
         user,
+        token, // Include the token in the response body
       },
-      "user has been created"
+      "User has been created"
     )
   );
 });
@@ -94,15 +88,8 @@ const login = asyncHandler(async (req, res, next) => {
 });
 
 const logoutUser = asyncHandler(async (req, res) => {
-  const options = {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-  };
-
-  return res
-    .status(200)
-    .clearCookie("accessToken", options)
-    .json(new ApiResponse(200, {}, "User logged out"));
+  // Instead of clearing cookies, simply send a success response
+  return res.status(200).json(new ApiResponse(200, {}, "User logged out"));
 });
 
 module.exports = { registerUser, login, logoutUser };

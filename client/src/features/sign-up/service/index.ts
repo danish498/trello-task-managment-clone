@@ -1,12 +1,13 @@
 import apiClient from "@/lib/apiClient";
-import { userAuthSchema } from "@/lib/validations/auth";
+import { TRegisterSchema } from "@/lib/validations/auth";
 import { z } from "zod";
-type FormData = z.infer<typeof userAuthSchema>;
 import { setCookie } from "cookies-next";
 
-export const logInApi = async (data: FormData) => {
+export const registrationApi = async (data: TRegisterSchema) => {
+  console.log("check reg", data);
+
   try {
-    const response = await apiClient.post(`/login`, data, {
+    const response = await apiClient.post(`/register`, data, {
       withCredentials: true,
     });
 
