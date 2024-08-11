@@ -71,7 +71,7 @@ export default function Home() {
   ];
 
   const greetingMessage = getGreetingMessage();
-  const name = getCookie("name") || "";
+  const name = getCookie("name");
 
   const firstName = getFirstName(name);
 
